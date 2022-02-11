@@ -2,7 +2,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.views import generic, View
 from django.views.generic import FormView
-from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import AnonymousUser
 
 from .forms import CommentForm, NewsForm, UpdateNewsForm
