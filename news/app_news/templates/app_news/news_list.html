@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Список Новостей</title>
+    </head>
+    <body>
+        <h3>Новости:</h3>
+            <ul style="list-style: none;">
+                {% for news in news_list %}
+                {% if news.flag %}
+                <li style="margin-bottom:20px;">
+                    <a href="/news/{{ news.id }}">{{ news.title }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        <p></p>
+        <button><a href="/">На главную</a></button>
+    </body>
+</html>

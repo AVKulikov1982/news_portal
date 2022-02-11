@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Новостной портал</title>
+</head>
+<body>
+  {% if request.user.is_authenticated %}
+    <h3>Добро пожаловать {{ request.user.username }}!</h3>
+    <p>для выхода из ученой записи нажмите</p>
+    <button style="width: 60px;"><a href="/user/logout">Выйти</a></button>
+  {% else %}
+    <h3>Вы не авторизованны на сайте!</h3>
+    <p>для входа в ученую запись нажмите</p>
+    <button style="width: 60px; margin-right: 10px;"><a href="/user/login">Войти</a></button>
+  {% endif %}
+  <h2>Новостной портал</h2>
+  <a href="/create_news">Добавить новость</a>
+  <p></p>
+  <a href="/select_news">Редактировать новость</a>
+  <p></p>
+  <a href="/news">Посмотреть все новости</a>
+  <p></p>
+  <a href="/admin">Админка</a>
+</body>
+</html>

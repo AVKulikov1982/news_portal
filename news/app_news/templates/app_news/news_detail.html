@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Новость</title>
+    </head>
+    <body>
+        <h1>{{ object.title }}</h1>
+        <p>{{ object.content }}</p>
+        <p>создано: {{ object.created_at }}</p>
+
+        {% if object.comments %}
+        <p>комментарии:</p>
+            {% for comment in object.comments.all %}
+            <p> {{ comment.username }} - {{ comment.comment }}</p>
+            {% endfor %}
+        {% endif %}
+
+        {% if request.user.is_authenticated %}
+        <div style="display: inline-block; padding: 5px; border: 2px solid grey;">
+            <p style="font-size: 10px;">добавить комментарий:</p>
+                <form method="post" action="/news/{{ object.id }}">
+                    {% csrf_token %}
+                    {{ form.comment }}
+                    <button type="submit">Добавить комментарий</button>
+                </form>
+        </div>
+        {% else %}
+        <div style="display: inline-block; padding: 5px; border: 2px solid grey;">
+            <p style="font-size: 10px;">добавить комментарий:</p>
+                <form method="post" action="/news/{{ object.id }}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Добавить комментарий</button>
+                </form>
+        </div>
+        {% endif %}
+
+        <p></p>
+        <button><a href="/">На главную</a></button>
+    </body>
+</html>
