@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Личный кабинет</title>
+</head>
+<body>
+  <h2>Ваши данные</h2>
+  <div>
+    <p>{{ request.user.username }}</p>
+    <p>{{ request.user.first_name }}</p>
+    <p>{{ request.user.last_name }}
+    <p>{{ request.user.email }}
+    <p>Номер телефона - {{ request.user.profile.phone }}</p>
+    <p>Город - {{ request.user.profile.city }}</p>
+<!--    <p>Верификация - {{ request.user.verification }}</p>-->
+<!--    <p>Количество новостей - {{ request.user.count_news }}</p>-->
+  </div>
+  <p></p>
+  <button><a href="/">На главную</a></button>
+
+</body>
+</html>

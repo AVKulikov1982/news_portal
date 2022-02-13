@@ -6,13 +6,17 @@
 </head>
 <body>
   {% if request.user.is_authenticated %}
-    <h3>Добро пожаловать {{ request.user.username }}!</h3>
+    <h3>Добро пожаловать {{ request.user.first_name }}!</h3>
     <p>для выхода из ученой записи нажмите</p>
-    <button style="width: 60px;"><a href="/user/logout">Выйти</a></button>
+  <button style="width: 60px;"><a href="/user/logout">Выйти</a></button>
+    <p>для входа в личный кабинет нажмите</p>
+  <button style="width: 150px;"><a href="/user/account">Личный кабинет</a></button>
   {% else %}
     <h3>Вы не авторизованны на сайте!</h3>
     <p>для входа в ученую запись нажмите</p>
     <button style="width: 60px; margin-right: 10px;"><a href="/user/login">Войти</a></button>
+    <p>для регистрации нажмите</p>
+    <button style="width: 150px; margin-right: 10px;"><a href="/user/registration">Зарегистрироваться</a></button>
   {% endif %}
   <h2>Новостной портал</h2>
   <a href="/create_news">Добавить новость</a>
