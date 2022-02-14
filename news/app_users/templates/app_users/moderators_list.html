@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Добавление прав модерации</title>
+</head>
+<body>
+  <h3>Добавление прав модерации</h3>
+    <ul style="list-style: none;">
+      {% if users_list %}
+        {% for user in users_list %}
+          {% if not user.is_moderator and user.user.username != 'admin' %}
+            <li style="margin-bottom:20px;">
+              <a href="/user/add_moderator/{{ user.id }}">{{ user.user.username }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </ul>
+  <p></p>
+  <button><a href="/">На главную</a></button>
+</body>
+</html>

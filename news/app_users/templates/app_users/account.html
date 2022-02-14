@@ -13,6 +13,7 @@
     <p>{{ request.user.email }}
     <p>Номер телефона - {{ request.user.profile.phone }}</p>
     <p>Город - {{ request.user.profile.city }}</p>
+    <p>Модератор - {{ request.user.profile.is_moderator }}
 <!--    <p>Верификация - {{ request.user.verification }}</p>-->
 <!--    <p>Количество новостей - {{ request.user.count_news }}</p>-->
   </div>

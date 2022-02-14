@@ -8,13 +8,21 @@
         <h3>Новости:</h3>
             <ul style="list-style: none;">
                 {% for news in news_list %}
-                {% if news.flag %}
-                <li style="margin-bottom:20px;">
-                    <a href="/news/{{ news.id }}">{{ news.title }}</a>
-                </li>
-                {% endif %}
+                    {% if news.flag %}
+                        <li style="margin-bottom:20px;">
+                            <a href="/news/{{ news.id }}">{{ news.title }}</a>
+                        </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
+
+        <p>фильтровать по тэгу и/или по дате создания</p>
+        <form method="post" action="/news">
+            {% csrf_token %}
+            {{ filter_form.as_p }}
+            <button type="submit">фильтровать</button>
+        </form>
+
         <p></p>
         <button><a href="/">На главную</a></button>
     </body>

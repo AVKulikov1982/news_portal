@@ -2,21 +2,46 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.views import generic, View
 from django.views.generic import FormView
-from django.contrib.auth.models import AnonymousUser
-
-from .forms import CommentForm, NewsForm, UpdateNewsForm
+from django.contrib.auth.models import AnonymousUser, User, Group
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import permission_required
+from .forms import CommentForm, NewsForm, UpdateNewsForm, FilterForm
 from .models import News, Comment
 
 
 def home_page(request):
-	return render(request, 'app_news/home.html')
+	moderators = Group.objects.get(name="moderators").user_set.all()
+	verified = Group.objects.get(name="verified").user_set.all()
+	return render(request, 'app_news/home.html', context={'moderators': moderators, 'verified': verified})
 
 
-class NewsListView(generic.ListView):
-	model = News
-	template_name = 'app_news/news_list.html'
-	context_object_name = 'news_list'
-	queryset = News.objects.all()
+class NewsListView(View):
+
+	@staticmethod
+	def get(request):
+		news_list = News.objects.all()
+		filter_form = FilterForm()
+		return render(request, 'app_news/news_list.html', context={'news_list': news_list, 'filter_form': filter_form})
+
+	@staticmethod
+	def post(request):
+		filter_form = FilterForm(request.POST)
+		if filter_form.is_valid():
+			tag = filter_form.cleaned_data.get('tag')
+			created_at = filter_form.cleaned_data.get('created_at')
+			if tag and not created_at:
+				news_list = News.objects.filter(tag=tag)
+			elif not tag and created_at:
+				news_list = News.objects.filter(created_at=created_at)
+			elif tag and created_at:
+				news_list = News.objects.filter(tag=tag, created_at=created_at)
+			else:
+				news_list = News.objects.all()
+
+			return render(request, 'app_news/news_list.html', context={'news_list': news_list})
+		else:
+			news_list = News.objects.all()
+			return render(request, 'app_news/news_list.html', context={'news_list': news_list, 'filter_form': filter_form})
 
 
 class NewsDetailView(generic.DetailView, FormView):
@@ -28,7 +53,8 @@ class NewsDetailView(generic.DetailView, FormView):
 		context = super(NewsDetailView, self).get_context_data(**kwargs)
 		return context
 
-	def post(self, request, *args, **kwargs):
+	@staticmethod
+	def post(request):
 		comment_form = CommentForm(request.POST)
 		comment = Comment()
 		if request.user.is_anonymous:
@@ -37,7 +63,7 @@ class NewsDetailView(generic.DetailView, FormView):
 				comment.comment = comment_form.cleaned_data['comment']
 				comment.news = News.objects.get(id=int(request.path.split('/')[-1]))
 		else:
-			comment.username = request.user
+			comment.username = request.user.first_name
 			comment.comment = request.POST['comment']
 		comment.news = News.objects.get(id=int(request.path.split('/')[-1]))
 		comment.save()
@@ -48,6 +74,8 @@ class CreateNewsFormView(View):
 
 	@staticmethod
 	def get(request):
+		if not request.user.groups.filter(name='verified').exists() and request.user.username != 'admin':
+			raise PermissionDenied()
 		news_form = NewsForm()
 		return render(request, 'app_news/create_news.html', context={'news_form': news_form})
 
@@ -84,5 +112,4 @@ class UpdateNewsView(View):
 		news_form = UpdateNewsForm(request.POST, instance=news)
 		if news_form.is_valid():
 			news.save()
-		# return render(request, 'app_news/update_news.html', context={'news_form': news_form, 'news_id': news_id})
 		return HttpResponseRedirect('/')

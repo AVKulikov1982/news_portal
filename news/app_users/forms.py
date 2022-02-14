@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import Profile
 
 
 class AuthForm(forms.Form):
@@ -24,3 +25,17 @@ class RegisterForm(UserCreationForm):
 		model = User
 		fields = ['username', 'first_name', 'last_name', 'email', 'phone',
 				  'city', 'card_number', 'date_of_birth', 'password1', 'password2']
+
+
+class ModeratorForm(forms.ModelForm):
+
+	class Meta:
+		model = Profile
+		fields = ['is_moderator']
+
+
+class VerifiedForm(forms.ModelForm):
+
+	class Meta:
+		model = Profile
+		fields = ['is_verified']
