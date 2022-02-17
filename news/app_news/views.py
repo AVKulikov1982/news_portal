@@ -10,6 +10,8 @@ from .models import News, Comment
 
 
 def home_page(request):
+	Group.objects.get_or_create(name='moderators')
+	Group.objects.get_or_create(name='verified')
 	moderators = Group.objects.get(name="moderators").user_set.all()
 	verified = Group.objects.get(name="verified").user_set.all()
 	return render(request, 'app_news/home.html', context={'moderators': moderators, 'verified': verified})
@@ -81,11 +83,14 @@ class CreateNewsFormView(View):
 
 	@staticmethod
 	def post(request):
+		if not request.user.has_perm('app_news.can_add'):
+			raise PermissionDenied()
 		news_form = NewsForm(request.POST)
 		if news_form.is_valid():
 			news = News()
 			news.title = news_form.cleaned_data['title']
 			news.content = news_form.cleaned_data['content']
+			news.tag = news_form.cleaned_data['tag']
 			news.save()
 			return HttpResponseRedirect('/')
 		return render(request, 'app_news/create_news.html', context={'news_form': news_form})
@@ -108,6 +113,8 @@ class UpdateNewsView(View):
 
 	@staticmethod
 	def post(request, news_id):
+		if not request.user.has_perm('app_news.can_published'):
+			raise PermissionDenied()
 		news = News.objects.get(id=news_id)
 		news_form = UpdateNewsForm(request.POST, instance=news)
 		if news_form.is_valid():

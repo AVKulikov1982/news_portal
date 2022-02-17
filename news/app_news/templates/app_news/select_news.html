@@ -10,6 +10,9 @@
         {% for news in news_list %}
         <li style="margin-bottom:20px;">
             <a href="/update_news/{{ news.id }}">{{ news.title }}</a>
+            {% if news.flag %} - опубликована
+            {% else %} - не опубликована
+            {% endif %}
         </li>
         {% endfor %}
     </ul>

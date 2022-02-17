@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Список товаров</title>
+  <style>
+    td {border: 1px solid grey;}
+  </style>
+</head>
+<body>
+  <h3>список товаров</h3>
+  <p></p>
+  <button><a href="upload_price_file/">Обновить/добавить товары</a></button>
+  <p></p>
+  <button><a href="upload_file/">Загрузить файл</a></button>
+  {% if items_list %}
+  <table>
+    <thead>
+      <tr>
+        <td>Артикул</td>
+        <td>ЦЕНА</td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items_list %}
+      <tr>
+        <td>{{ item.title }}</td>
+        <td>{{ item.price }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>нет товаров</p>
+  {% endif %}
+  <p></p>
+  <button><a href="/">На главную</a></button>
+</body>
+</html>

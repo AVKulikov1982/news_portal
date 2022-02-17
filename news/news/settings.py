@@ -37,6 +37,8 @@ INSTALLED_APPS = [
 	'django.contrib.staticfiles',
 	'app_news',
 	'app_users',
+	'app_media',
+	'app_goods',
 ]
 
 MIDDLEWARE = [
@@ -75,7 +77,7 @@ WSGI_APPLICATION = 'news.wsgi.application'
 DATABASES = {
 	'default': {
 		'ENGINE': 'django.db.backends.sqlite3',
-		'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+		'NAME': os.path.join(BASE_DIR, 'db_git.sqlite3'),
 	}
 }
 
@@ -123,4 +125,6 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 SESSION_COOKIE_NAME = 'id_session'
 
-APPEND_SLASH = False
+# APPEND_SLASH = False
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

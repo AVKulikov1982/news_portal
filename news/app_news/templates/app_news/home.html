@@ -13,15 +13,20 @@
             <button style="width: 150px;"><a href="/user/account">Личный кабинет</a></button>
 
             {% if request.user.username == 'admin' %}
+                <h3>Статус - Администратор</h3>
                 <p></p>
                 <button style="width: 150px;"><a href="/user/add_moderator">Заявки на модераторов</a></button>
-            {% endif %}
-
-            {% if request.user in moderators %}
+                <p></p>
+                <a href="/admin">Админка</a>
+            {% elif request.user in moderators %}
+                <h3>Статус - Модератор</h3>
                 <p></p>
                 <button style="width: 150px;"><a href="/user/add_verified">Заявки на верификацию</a></button>
+            {% elif request.user in verified %}
+                <h3>Статус - Верифицированный пользователь</h3>
+            {% else %}
+                <h3>Статус - Не верифицированный пользователь</h3>
             {% endif %}
-
         {% else %}
 
             <h3>Вы не авторизованны на сайте!</h3>
@@ -41,7 +46,8 @@
                 <p></p>
             {% endif %}
             <a href="/news">Посмотреть все новости</a>
+
             <p></p>
-            <a href="/admin">Админка</a>
+            <button><a href="items/">Посмотреть товары</a></button>
     </body>
 </html>

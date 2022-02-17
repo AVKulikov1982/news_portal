@@ -17,6 +17,7 @@ class News(models.Model):
 	class Meta:
 		db_table = 'news'
 		ordering = ['created_at']
+		permissions = (('can_published', 'может публиковать'), )
 
 
 class Comment(models.Model):
